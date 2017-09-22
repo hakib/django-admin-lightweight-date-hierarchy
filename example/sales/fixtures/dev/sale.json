@@ -1,0 +1,32 @@
+[
+    {
+        "model": "sales.sale",
+        "fields": {
+            "created": "2017-01-01T15:30:00Z"
+        }
+    },
+    {
+        "model": "sales.sale",
+        "fields": {
+            "created": "2017-01-02T15:30:00Z"
+        }
+    },
+    {
+        "model": "sales.sale",
+        "fields": {
+            "created": "2017-02-15T15:30:00Z"
+        }
+    },
+    {
+        "model": "sales.sale",
+        "fields": {
+            "created": "2017-03-15T15:30:00Z"
+        }
+    },
+    {
+        "model": "sales.sale",
+        "fields": {
+            "created": "2018-03-15T15:30:00Z"
+        }
+    }
+]
