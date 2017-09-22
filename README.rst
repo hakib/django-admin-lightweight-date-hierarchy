@@ -24,9 +24,9 @@ on the selected hierarchy level without performing a query.
 
 Default options for hierarchy levels:
 
-    Month - all days of the month.
-    Year - All months of year.
-    None - +-3 years from current year.
+- Month - all days of the month.
+- Year - All months of year.
+- None - +-3 years from current year.
 
 When date_hierarchy_drilldown = True or when not set the default behaviour is preserved.
 
