@@ -1,4 +1,4 @@
-.PHONY: clean-pyc clean-build docs help
+.PHONY: clean-pyc clean-build help
 .DEFAULT_GOAL := help
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
@@ -41,14 +41,6 @@ coverage: ## check code coverage quickly with the default Python
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
-
-docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/django-admin-lightweight-date-hierarchy.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ django_admin_lightweight_date_hierarchy
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
 
 release: clean ## package and upload a release
 	python setup.py sdist upload

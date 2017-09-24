@@ -65,12 +65,6 @@ Add the following to any model admin with date hierarchy to prevent the default 
         date_hierarchy_drilldown = False
 
 
-Documentation
--------------
-
-The full documentation is at https://django-admin-lightweight-date-hierarchy.readthedocs.io.
-
-
 Running Tests
 -------------
 
