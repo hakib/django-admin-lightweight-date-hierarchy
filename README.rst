@@ -34,7 +34,7 @@ When date_hierarchy_drilldown = True or when not set the default behaviour is pr
 Support
 ----------
 
-Python 2.7, 3.3, 3.4, 3.5
+Python 2.7, 3.4, 3.5, 3.6
 Django 1.9, 1.10, 1.11
 
 
