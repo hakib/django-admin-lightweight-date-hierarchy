@@ -59,7 +59,7 @@ setup(
     install_requires=[
         'Django>=1.9',
     ],
-    license="MIT",
+    license="MIT, Django",
     zip_safe=False,
     keywords='django-admin-lightweight-date-hierarchy',
     classifiers=[

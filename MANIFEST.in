@@ -2,5 +2,6 @@ include AUTHORS.rst
 include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
+include LICENSE.django
 include README.rst
 recursive-include django_admin_lightweight_date_hierarchy *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
