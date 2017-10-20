@@ -68,6 +68,14 @@ Add the following to any ``ModelAdmin`` with ``date_hierarchy`` to prevent the d
         date_hierarchy_drilldown = False
 
 
+Blog Post
+----------
+
+You can read more about this package my blog post ``scaling django admin date hierarchy``.
+
+.. _`scaling django admin date hierarchy`: https://medium.com/@hakibenita/scaling-django-admin-date-hierarchy-85c8e441dd4c
+
+
 Running Tests
 -------------
 
