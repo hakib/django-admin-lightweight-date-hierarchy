@@ -116,3 +116,19 @@ class TestDateHeirarchyDrilldown(TestCase):
             #   4. Results
             with self.assertNumQueries(4):
                 self.client.get(endpoint)
+
+    def test_should_apply_custom_drilldown_when_no_filter(self):
+        response = self.client.get('/admin/tests/foocustomhierarchy/')
+        self.assertContains(response, '?created__year=2018')
+        self.assertNotContains(response, '?created__year=2017')
+
+    def test_should_apply_custom_drilldown_for_year(self):
+        response = self.client.get('/admin/tests/foocustomhierarchy/?created__year=2017')
+        self.assertContains(response, '?created__month=1&amp;created__year=2017')
+        self.assertNotContains(response, '?created__month=2&amp;created__year=2017')
+
+    def test_should_apply_custom_drilldown_for_month(self):
+        response = self.client.get('/admin/tests/foocustomhierarchy/?created__year=2017&created__month=1')
+        self.assertContains(response, '?created__day=1&amp;created__month=1&amp;created__year=2017')
+        self.assertContains(response, '?created__day=2&amp;created__month=1&amp;created__year=2017')
+        self.assertNotContains(response, '?created__day=3&amp;created__month=1&amp;created__year=2017')
