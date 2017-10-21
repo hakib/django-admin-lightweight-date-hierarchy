@@ -16,3 +16,9 @@ class SaleWithDrilldown(Sale):
     class Meta:
         proxy = True
         verbose_name = 'Sale model with default drilldown'
+
+
+class SaleWithCustomDrilldown(Sale):
+    class Meta:
+        proxy = True
+        verbose_name = 'Sale model with custom drilldown'

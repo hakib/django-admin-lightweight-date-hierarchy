@@ -15,6 +15,45 @@ def get_today():
     return datetime.date.today()
 
 
+def default_date_hierarchy_drilldown(year_lookup=None, month_lookup=None):
+    """Generate default drill-down for any level of the hierarchy.
+
+    year_lookup (int or None):
+        Year lookup.
+        None when no lookup.
+    month_lookup (int or None):
+        Month lookup (1-12).
+        None when lookup by year or when no lookup.
+
+    Returns (generator<datetime.date>):
+        Dates to drill-down to.
+    """
+    if year_lookup is None and month_lookup is None:
+        # Three years from each direction.
+        today = get_today()
+        return (
+            datetime.date(y, 1, 1)
+            for y in range(today.year - 3, today.year + 3 + 1)
+        )
+
+    elif year_lookup is not None and month_lookup is None:
+        # All months of selected year.
+        return (
+            datetime.date(int(year_lookup), month, 1)
+            for month in range(1, 13)
+        )
+
+    elif year_lookup is not None and month_lookup is not None:
+        # All days of month.
+        return (
+            datetime.date(year_lookup, month_lookup, 1) + datetime.timedelta(days=i)
+            for i in range(calendar.monthrange(year_lookup, month_lookup)[1])
+        )
+
+    else:
+        assert 'date hierarchy drilldown makes no sense.'
+
+
 @register.inclusion_tag('admin/date_hierarchy.html')
 def date_hierarchy(cl):
     """Displays the date hierarchy for date drill-down functionality.
@@ -61,6 +100,7 @@ def date_hierarchy(cl):
             return cl.get_query_string(filters, [field_generic])
 
         date_hierarchy_drilldown = getattr(cl.model_admin, 'date_hierarchy_drilldown', True)
+        date_hierarchy_drilldown_fn = getattr(cl.model_admin, 'get_date_hierarchy_drilldown', default_date_hierarchy_drilldown)
 
         if not (year_lookup or month_lookup or day_lookup):
 
@@ -91,11 +131,7 @@ def date_hierarchy(cl):
                 days = getattr(days, dates_or_datetimes)(field_name, 'day')
 
             else:
-                # All days of month.
-                days = (
-                    datetime.date(int(year_lookup), int(month_lookup), 1) + datetime.timedelta(days=i)
-                    for i in range(calendar.monthrange(int(year_lookup), int(month_lookup))[1])
-                )
+                days = date_hierarchy_drilldown_fn(int(year_lookup), int(month_lookup))
 
             return {
                 'show': True,
@@ -116,11 +152,7 @@ def date_hierarchy(cl):
                 months = getattr(months, dates_or_datetimes)(field_name, 'month')
 
             else:
-                # All months of selected year.
-                months = (
-                    datetime.date(int(year_lookup), month, 1)
-                    for month in range(1, 13)
-                )
+                months = date_hierarchy_drilldown_fn(int(year_lookup), None)
 
             return {
                 'show': True,
@@ -140,12 +172,7 @@ def date_hierarchy(cl):
                 years = getattr(cl.queryset, dates_or_datetimes)(field_name, 'year')
 
             else:
-                # Three years from each direction.
-                today = get_today()
-                years = (
-                    datetime.date(y, 1, 1)
-                    for y in range(today.year - 3, today.year + 3 + 1)
-                )
+                years = date_hierarchy_drilldown_fn(None, None)
 
             return {
                 'show': True,
