@@ -109,7 +109,6 @@ def date_hierarchy(cl):
                 } for day in days]
             }
 
-
         elif year_lookup:
 
             if date_hierarchy_drilldown:
