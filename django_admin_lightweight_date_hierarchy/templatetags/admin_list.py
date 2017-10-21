@@ -22,12 +22,12 @@ def date_hierarchy(cl):
     This tag overrides Django Admin date_hierarchy template tag at
     django/contrib/admin/templatetags/admin_list.py -> date_hierarchy
 
-    The tag prevents additional queries used for generating the date hirarchy.
+    The tag prevents additional queries used for generating the date hierarchy.
     The default tag performs a query on the filtered queryset to find the dates
     for which there is data for the level in the hierarchy. On large tables
     this query can be very expensive.
 
-    The additonal query is prevented by setting date_hierarchy_drilldown = False
+    The additional query is prevented by setting date_hierarchy_drilldown = False
     on the model admin. When drilldown is disabled the tag will generate a default
     range of dates based only on the selected hierarchy level without performing a
     query.
@@ -108,7 +108,6 @@ def date_hierarchy(cl):
                     'title': capfirst(formats.date_format(day, 'MONTH_DAY_FORMAT'))
                 } for day in days]
             }
-
 
         elif year_lookup:
 
