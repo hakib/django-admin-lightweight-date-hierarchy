@@ -7,8 +7,6 @@ try:
 except ImportError:
     import mock
 
-import django
-from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -62,10 +60,15 @@ class TestDateHeirarchyDrilldown(TestCase):
             # Year + Month
             response = self.client.get('/admin/tests/{}/?created__year=2017&created__month=1'.format(model))
             for day in (15, 16):
-                self.assertContains(response, '?created__day={}&amp;created__month=1&amp;created__year=2017'.format(day))
+                self.assertContains(
+                    response,
+                    '?created__day={}&amp;created__month=1&amp;created__year=2017'.format(day)
+                )
 
             # Year + Month + Day
-            response = self.client.get('/admin/tests/{}/?created__year=2017&created__month=1&created__day=15'.format(model))
+            response = self.client.get(
+                '/admin/tests/{}/?created__year=2017&created__month=1&created__day=15'.format(model)
+            )
 
             # Back date
             self.assertContains(response, '?created__month=1&amp;created__year=2017')

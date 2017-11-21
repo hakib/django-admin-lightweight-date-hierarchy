@@ -100,7 +100,11 @@ def date_hierarchy(cl):
             return cl.get_query_string(filters, [field_generic])
 
         date_hierarchy_drilldown = getattr(cl.model_admin, 'date_hierarchy_drilldown', True)
-        date_hierarchy_drilldown_fn = getattr(cl.model_admin, 'get_date_hierarchy_drilldown', default_date_hierarchy_drilldown)
+        date_hierarchy_drilldown_fn = getattr(
+            cl.model_admin,
+            'get_date_hierarchy_drilldown',
+            default_date_hierarchy_drilldown,
+        )
 
         if not (year_lookup or month_lookup or day_lookup):
 
