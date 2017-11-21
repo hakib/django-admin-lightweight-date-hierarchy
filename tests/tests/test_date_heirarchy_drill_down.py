@@ -13,13 +13,13 @@ from django.test import TestCase
 from ..models import Foo
 
 
-class TestDateHeirarchyDrilldown(TestCase):
+class TestDateHierarchyDrilldown(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        super(TestDateHeirarchyDrilldown, cls).setUpTestData()
+        super(TestDateHierarchyDrilldown, cls).setUpTestData()
 
-        # Create test data in all ranges of the heirarchy.
+        # Create test data in all ranges of the hierarchy.
         Foo.objects.bulk_create([
             Foo(created=pytz.UTC.localize(datetime.datetime(*t)))
             for t in [
@@ -45,7 +45,7 @@ class TestDateHeirarchyDrilldown(TestCase):
         })
 
     def test_should_preserve_default_behaviour(self):
-        # This is basically testing django's date heirarchy...
+        # This is basically testing django's date hierarchy...
         for model in (
             # date_hierarchy_drilldown = False
             'foodrilldown',
@@ -106,7 +106,7 @@ class TestDateHeirarchyDrilldown(TestCase):
         # Current selection
         self.assertContains(response, 'January 15')
 
-    def test_should_not_execute_additional_queries_for_date_heirarchy(self):
+    def test_should_not_execute_additional_queries_for_date_hierarchy(self):
         for endpoint in (
             '/admin/tests/foonodrilldown/?created__year=2017',
             '/admin/tests/foonodrilldown/?created__year=2017&created__month=1',

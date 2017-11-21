@@ -11,7 +11,7 @@ class Sale(models.Model):
 class SaleWithDrilldown(Sale):
     """
     We will use this model in the admin to illustrate the difference
-    between date heirarchy with and without drilldown.
+    between date hierarchy with and without drilldown.
     """
     class Meta:
         proxy = True
