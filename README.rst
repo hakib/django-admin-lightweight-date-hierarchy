@@ -122,10 +122,72 @@ For example, a custom drill-down that offers only past dates:
                     ) if day <= today
                 )
 
+
+RangeBasedDateHierarchyListFilter
+----------------------------------------------
+
+Django filters the queryset for a given level in the date hierarchy using a database
+function to extract the relevent date part. For example, when filtering a queryset on
+a `created` date field for November 2017, Django will execute the following query:
+
+.. code-block:: sql
+
+    SELECT
+        ...
+    FROM
+        app_model
+    WHERE
+        created BETWEEN '2017-01-01 00:00:00' AND '2017-12-31 23:59:59.999999'
+        AND EXTRACT('month', created) = 11
+
+A function is opaque to the database optimizer. If you have a range-based (btree) index
+on the field, using EXTRACT does not limit the range at all, and so the index is not
+utilized properly which might lead to a sub optimal execution plan.
+
+There are several approaches to tackle this issue. For exmaple, in databases that support
+function based indexes the developer can add an index on the specific function to try and
+improve the performace of the query. The downside to this approach is having to maintain
+additional indexes for each level of the hierarchy. Additional indexes slow down insert
+and update operations, and take up space.
+
+Another approach is to simplify the condition used by Django to filter the queryset
+for any given level in the hierarchy:
+
+.. code-block:: sql
+
+    SELECT
+        ...
+    FROM
+        app_model
+    WHERE
+        created >= '2017-11-01 00:00:00'
+        AND created < '2017-12-01 00:00:00'
+
+
+This is what RangeBasedDateHierarchyListFilter does.
+
+To achieve the above query, simply add the following to your ModelAdmin:
+
+.. code-block:: python
+
+
+    from django.contrib import admin
+    from django_admin_lightweight_date_hierarchy.admin import RangeBasedDateHierarchyListFilter
+
+
+    @admin.register(MyModel)
+    class MyModelAdmin(admin.ModelAdmin):
+        date_hierarchy = 'created'
+
+        list_filters = (
+            RangeBasedDateHierarchyListFilter,
+        )
+
+
 Blog Post
 ----------
 
-You can read more about this package my blog post `scaling django admin date hierarchy`_.
+You can read more about this package in my blog post `scaling django admin date hierarchy`_.
 
 .. _`scaling django admin date hierarchy`: https://medium.com/@hakibenita/scaling-django-admin-date-hierarchy-85c8e441dd4c
 
