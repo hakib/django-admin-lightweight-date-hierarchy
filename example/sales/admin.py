@@ -4,6 +4,7 @@ import calendar
 from django.contrib import admin
 from django.utils import timezone
 
+from django_admin_lightweight_date_hierarchy.admin import RangeBasedDateHierarchyListFilter
 from .models import Sale, SaleWithDrilldown, SaleWithCustomDrilldown
 
 
@@ -12,16 +13,28 @@ class SaleAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
     date_hierarchy_drilldown = False
 
+    list_filters = (
+        RangeBasedDateHierarchyListFilter,
+    )
+
 
 @admin.register(SaleWithDrilldown)
 class SaleWithDrilldownAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
+
+    list_filters = (
+        RangeBasedDateHierarchyListFilter,
+    )
 
 
 @admin.register(SaleWithCustomDrilldown)
 class SaleWithCustomDrilldown(admin.ModelAdmin):
     date_hierarchy = 'created'
     date_hierarchy_drilldown = False
+
+    list_filters = (
+        RangeBasedDateHierarchyListFilter,
+    )
 
     def get_date_hierarchy_drilldown(self, year_lookup, month_lookup):
         """Drill-down only on past dates."""

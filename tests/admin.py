@@ -3,6 +3,7 @@ import datetime
 
 from django.contrib import admin
 
+from django_admin_lightweight_date_hierarchy.admin import RangeBasedDateHierarchyListFilter
 from .models import Foo
 
 
@@ -68,3 +69,17 @@ class FooCustomHierarchyAdmin(admin.ModelAdmin):
                 datetime.date(year_lookup, month_lookup, 1),
                 datetime.date(year_lookup, month_lookup, 2),
             )
+
+
+class FooWithRangeBasedDateHierarchyListFilter(Foo):
+    class Meta:
+        proxy = True
+
+
+@admin.register(FooWithRangeBasedDateHierarchyListFilter)
+class FooWithRangeBasedDateHierarchyListFilterAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created'
+
+    list_filter = (
+        RangeBasedDateHierarchyListFilter,
+    )
