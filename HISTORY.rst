@@ -3,6 +3,11 @@
 History
 -------
 
+0.3.0 (2017-11-24)
+++++++++++++++++++
+
+* Added RangeBasedDateHierarchyListFilter.
+
 0.2.0 (2017-10-21)
 ++++++++++++++++++
 
