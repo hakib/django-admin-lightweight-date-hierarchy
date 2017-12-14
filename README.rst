@@ -122,6 +122,13 @@ For example, a custom drill-down that offers only past dates:
                     ) if day <= today
                 )
 
+Blog Post
+----------
+
+More about the process of developing date hierarchy drill-down in this blog post `scaling django admin date hierarchy`_.
+
+.. _`scaling django admin date hierarchy`: https://medium.com/@hakibenita/scaling-django-admin-date-hierarchy-85c8e441dd4c
+
 
 RangeBasedDateHierarchyListFilter
 ----------------------------------------------
@@ -144,7 +151,7 @@ A function is opaque to the database optimizer. If you have a range-based (btree
 on the field, using EXTRACT does not limit the range at all, and so the index is not
 utilized properly which might lead to a sub optimal execution plan.
 
-There are several approaches to tackle this issue. For exmaple, in databases that support
+There are several approaches to tackle this issue. For example, in databases that support
 function based indexes the developer can add an index on the specific function to try and
 improve the performace of the query. The downside to this approach is having to maintain
 additional indexes for each level of the hierarchy. Additional indexes slow down insert
@@ -166,7 +173,7 @@ for any given level in the hierarchy:
 
 This is what RangeBasedDateHierarchyListFilter does.
 
-To achieve the above query, simply add the following to your ModelAdmin:
+To achieve the above query, add the following to your ModelAdmin:
 
 .. code-block:: python
 
@@ -187,9 +194,9 @@ To achieve the above query, simply add the following to your ModelAdmin:
 Blog Post
 ----------
 
-You can read more about this package in my blog post `scaling django admin date hierarchy`_.
+More about the motivation and the performace of RangeBasedDateHierarchyListFilter in this blog post `Django Admin Range-Based Date Hierarchy`_.
 
-.. _`scaling django admin date hierarchy`: https://medium.com/@hakibenita/scaling-django-admin-date-hierarchy-85c8e441dd4c
+.. _`Django Admin Range-Based Date Hierarchy`: https://codeburst.io/django-admin-range-based-date-hierarchy-37955b12ea4e
 
 
 Running Tests
