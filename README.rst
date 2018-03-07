@@ -186,7 +186,7 @@ To achieve the above query, add the following to your ModelAdmin:
     class MyModelAdmin(admin.ModelAdmin):
         date_hierarchy = 'created'
 
-        list_filters = (
+        list_filter = (
             RangeBasedDateHierarchyListFilter,
         )
 
