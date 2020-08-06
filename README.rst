@@ -15,6 +15,8 @@ Django Admin lightweight date hierarchy
 Django Admin date_hierarchy with zero queries
 ----------------------------------------------
 
+**NOTE**: The functionality provided by this extension is `included as part of Django <https://github.com/django/django/pull/9469>`_ starting at version 2.1.
+
 The built-in `date_hierarchy`_ tag performs a query to find the dates for which there is data.
 On large tables this query can be very expensive.
 
