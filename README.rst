@@ -131,7 +131,7 @@ Blog Post
 
 More about the process of developing date hierarchy drill-down in this blog post `scaling django admin date hierarchy`_.
 
-.. _`scaling django admin date hierarchy`: https://medium.com/@hakibenita/scaling-django-admin-date-hierarchy-85c8e441dd4c
+.. _`scaling django admin date hierarchy`: https://hakibenita.com/scaling-django-admin-date-hierarchy
 
 
 RangeBasedDateHierarchyListFilter
