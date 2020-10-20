@@ -53,7 +53,7 @@ jobs:
           python: 3.9
 
   deploy:
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'pytest-dev/pytest-django'
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'hakib/django-admin-lightweight-date-hierarchy'
     runs-on: ubuntu-20.04
     needs: [test]
 
