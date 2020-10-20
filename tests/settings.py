@@ -1,12 +1,7 @@
-# -*- coding: utf-8
-from __future__ import unicode_literals, absolute_import
-
 import django
 
 DEBUG = True
 USE_TZ = True
-
-SITE_ID = 1
 
 SECRET_KEY = "99999999999999999999999999999999999999999999999999"
 
@@ -20,9 +15,10 @@ DATABASES = {
 ROOT_URLCONF = "tests.urls"
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    "django.contrib.messages",
+    "django.contrib.admin",
     "django.contrib.auth",
-    'django.contrib.sessions',
+    "django.contrib.sessions",
     "django.contrib.contenttypes",
     "django.contrib.sites",
 
@@ -45,15 +41,9 @@ TEMPLATES = [
     },
 ]
 
-if django.VERSION >= (1, 10):
-    MIDDLEWARE = (
-        "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.common.CommonMiddleware",
-        "django.contrib.auth.middleware.AuthenticationMiddleware",
-    )
-else:
-    MIDDLEWARE_CLASSES = (
-        "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.middleware.common.CommonMiddleware",
-        "django.contrib.auth.middleware.AuthenticationMiddleware",
-    )
+MIDDLEWARE = (
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+)

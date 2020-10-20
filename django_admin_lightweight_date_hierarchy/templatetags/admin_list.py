@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 import datetime
 import calendar
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.templatetags.admin_list import register
 from django.utils.text import capfirst
 from django.utils import formats
