@@ -57,7 +57,7 @@ class RangeBasedDateHierarchyListFilter(admin.ListFilter):
 
         self.date_hierarchy = {}
 
-        date_hierarchy_field_re = re.compile(r'^{}__(day|month|year)$'.format(self.date_hierarchy_field))
+        date_hierarchy_field_re = re.compile(fr'^{self.date_hierarchy_field}__(day|month|year)$')
 
         # Django applies filters one by one on the params requested in the URL's.
         # By poping the date hierarchy from the params list we prevent the
@@ -81,6 +81,6 @@ class RangeBasedDateHierarchyListFilter(admin.ListFilter):
         from_date, to_date = get_date_range_for_hierarchy(self.date_hierarchy, tz)
 
         return queryset.filter(**{
-            '{}__gte'.format(self.date_hierarchy_field): from_date,
-            '{}__lt'.format(self.date_hierarchy_field): to_date,
+            f'{self.date_hierarchy_field}__gte': from_date,
+            f'{self.date_hierarchy_field}__lt': to_date,
         })

@@ -5,7 +5,7 @@ class Sale(models.Model):
     created = models.DateTimeField()
 
     def __str__(self):
-        return '[{}] {:%Y-%m-%d}'.format(self.id, self.created)
+        return f'[{self.id}] {self.created:%Y-%m-%d}'
 
 
 class SaleWithDrilldown(Sale):

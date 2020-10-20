@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import pytz
 import datetime
 
@@ -56,7 +55,7 @@ class TestRangeBasedDateHierarchyListFilter(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        super(TestRangeBasedDateHierarchyListFilter, cls).setUpTestData()
+        super().setUpTestData()
 
         default_timezone = timezone.get_default_timezone()
 
@@ -84,14 +83,10 @@ class TestRangeBasedDateHierarchyListFilter(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
-        # Django versions < 1.9 does not have client.force_login()
-        self.client.post('/admin/login/', {
-            'username': self.superuser.username,
-            'password': 'a321321321',
-        })
+        self.client.force_login(self.superuser)
 
     def get_results(self, query):
-        url = '/admin/tests/foowithrangebaseddatehierarchylistfilter/?{}'.format(query)
+        url = f'/admin/tests/foowithrangebaseddatehierarchylistfilter/?{query}'
         request = self.factory.get(url)
         response = self.client.get(url)
         cl = response.context_data['cl']

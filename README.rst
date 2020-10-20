@@ -1,6 +1,6 @@
-=============================
+=======================================
 Django Admin lightweight date hierarchy
-=============================
+=======================================
 
 .. image:: https://badge.fury.io/py/django-admin-lightweight-date-hierarchy.svg
     :target: https://badge.fury.io/py/django-admin-lightweight-date-hierarchy
@@ -15,7 +15,9 @@ Django Admin lightweight date hierarchy
 Django Admin date_hierarchy with zero queries
 ----------------------------------------------
 
-**NOTE**: The functionality provided by this extension is `included as part of Django <https://github.com/django/django/pull/9469>`_ starting at version 2.1.
+**NOTE**: Some of the functionality provided by this extension is `included as
+part of Django <https://github.com/django/django/pull/9469>`_ starting at
+version 2.1.
 
 The built-in `date_hierarchy`_ tag performs a query to find the dates for which there is data.
 On large tables this query can be very expensive.
@@ -38,9 +40,9 @@ When ``date_hierarchy_drilldown = True`` or when not set the default behaviour i
 Support
 ----------
 
-Python 2.7, 3.4, 3.5, 3.6
+Python>=3.6
 
-Django 1.9, 1.10, 1.11, 2.0
+Django>=2.2
 
 
 Quickstart
@@ -209,15 +211,3 @@ Running Tests
     source <YOURVIRTUALENV>/bin/activate
     (venv) $ pip install tox
     (venv) $ tox
-
-
-Credits
--------
-
-Tools used in rendering this package:
-
-*  Cookiecutter_
-*  `cookiecutter-djangopackage`_
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`cookiecutter-djangopackage`: https://github.com/pydanny/cookiecutter-djangopackage

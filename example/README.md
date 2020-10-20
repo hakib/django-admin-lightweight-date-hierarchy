@@ -1,33 +1,28 @@
-##Example Project for django_admin_lightweight_date_hierarchy
+## Example Project for django_admin_lightweight_date_hierarchy
 
-This example is provided as a convenience feature to allow potential users to try the app straight from the app repo without having to create a django project.
-
-It can also be used to develop the app in place.
+This example is provided as a convenience to allow potential users to try
+the app straight from the app repo without having to create a Django
+project.
 
 To run this example, follow these instructions:
 
-1. Navigate to the `example` directory
+1. Navigate to the `example` directory.
 
-2. Install the requirements for the package:
+2. Make and apply migrations
 
-		pip install -r requirements.txt
+    python manage.py makemigrations
+    python manage.py migrate
 
-3. Make and apply migrations
+3. Create a super-user to access admin
 
-		python manage.py makemigrations
-
-		python manage.py migrate
-
-3. Create a super user to access admin
-
-		python manage.py createsuperuser
+    python manage.py createsuperuser
 
 4. Load test data
 
-		python manage.py loaddata sales/fixtures/dev/sales.json
+    python manage.py loaddata sales/fixtures/dev/sales.json
 
 5. Run the server
 
-		python manage.py runserver
+    python manage.py runserver
 
-5. Access from the browser at `http://127.0.0.1:8000/admin`
+6. Access from the browser at `http://127.0.0.1:8000/admin`.
