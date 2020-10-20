@@ -5,7 +5,7 @@ on:
     branches:
       - master
     tags:
-      - "*"
+      - "v*"
   pull_request:
     branches:
       - master
@@ -51,3 +51,31 @@ jobs:
 
         - name: py39-dj31
           python: 3.9
+
+  deploy:
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'pytest-dev/pytest-django'
+    runs-on: ubuntu-20.04
+    needs: [test]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade wheel setuptools tox
+
+      - name: Build package
+        run: python setup.py sdist bdist_wheel
+
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@1.4.1
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_token }}
