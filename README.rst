@@ -5,8 +5,8 @@ Django Admin lightweight date hierarchy
 .. image:: https://badge.fury.io/py/django-admin-lightweight-date-hierarchy.svg
     :target: https://badge.fury.io/py/django-admin-lightweight-date-hierarchy
 
-.. image:: https://travis-ci.org/hakib/django-admin-lightweight-date-hierarchy.svg?branch=master
-    :target: https://travis-ci.org/hakib/django-admin-lightweight-date-hierarchy
+.. image:: https://github.com/hakib/django-admin-lightweight-date-hierarchy/actions/workflows/main.yml/badge.svg?branch=master
+    :target: https://github.com/hakib/django-admin-lightweight-date-hierarchy/actions/workflows/main.yml?query=branch%3Amaster
 
 .. image:: https://codecov.io/gh/hakib/django-admin-lightweight-date-hierarchy/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/hakib/django-admin-lightweight-date-hierarchy
