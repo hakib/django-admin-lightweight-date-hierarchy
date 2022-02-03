@@ -3,6 +3,20 @@
 History
 -------
 
+1.0.0 (2022-02-03)
+++++++++++++++++++
+
+* Added support for Django 4.0.
+* Added support for Python 3.10.
+* Dropped support Django 3.0, 3.1 (2.2 LTS is still supported).
+* Dropped support for Python 3.6.
+
+0.4.0 (2020-10-20)
+++++++++++++++++++
+
+* Modernized the packaging.
+* Added support for latest Django.
+
 0.3.0 (2017-11-24)
 ++++++++++++++++++
 
