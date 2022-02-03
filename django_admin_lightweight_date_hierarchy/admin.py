@@ -29,7 +29,7 @@ def get_date_range_for_hierarchy(date_hierarchy, tz):
     )
 
     if tz:
-        from_date = tz.localize(from_date)
+        from_date = from_date.replace(tzinfo=tz)
 
     if 'day' in date_hierarchy:
         to_date = from_date + datetime.timedelta(days=1)
