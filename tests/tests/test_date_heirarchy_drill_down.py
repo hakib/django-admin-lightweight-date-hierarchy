@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 import datetime
-import pytz
 from unittest import mock
 
 from django.contrib.auth.models import User
@@ -17,7 +15,7 @@ class TestDateHierarchyDrilldown(TestCase):
 
         # Create test data in all ranges of the hierarchy.
         Foo.objects.bulk_create([
-            Foo(created=pytz.UTC.localize(datetime.datetime(*t)))
+            Foo(created=datetime.datetime(*t, tzinfo=datetime.timezone.utc))
             for t in [
                 (2017, 1, 15, 15),
                 (2017, 1, 16, 15),

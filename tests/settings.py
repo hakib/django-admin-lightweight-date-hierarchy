@@ -12,6 +12,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 ROOT_URLCONF = "tests.urls"
 
 INSTALLED_APPS = [

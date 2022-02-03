@@ -32,25 +32,25 @@ jobs:
       matrix:
         include:
         - name: flake8
-          python: 3.8
-
-        - name: py36-dj22
-          python: 3.6
+          python: "3.10"
 
         - name: py37-dj22
-          python: 3.7
+          python: "3.7"
 
-        - name: py37-dj30
-          python: 3.7
+        - name: py38-dj22
+          python: "3.8"
 
-        - name: py38-dj30
-          python: 3.8
+        - name: py38-dj32
+          python: "3.8"
 
-        - name: py38-dj31
-          python: 3.8
+        - name: py39-dj32
+          python: "3.9"
 
-        - name: py39-dj31
-          python: 3.9
+        - name: py39-dj40
+          python: "3.9"
+
+        - name: py310-dj40
+          python: "3.10"
 
   deploy:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'hakib/django-admin-lightweight-date-hierarchy'
@@ -64,18 +64,18 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade wheel setuptools tox
+          pip install --upgrade build
 
       - name: Build package
-        run: python setup.py sdist bdist_wheel
+        run: python -m build
 
       - name: Publish package
-        uses: pypa/gh-action-pypi-publish@v1.4.1
+        uses: pypa/gh-action-pypi-publish@v1.5.0
         with:
           user: __token__
           password: ${{ secrets.pypi_token }}

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-import pytz
 import datetime
 
 from django.utils import timezone
@@ -19,17 +17,17 @@ class TestGetDateRangeForHierarchy(TestCase):
             self.subTest = fake_sub_test
 
     def test(self):
-        tz = pytz.UTC
+        utc = datetime.timezone.utc
 
         for  year, month, day,  expected_from_date,                           expected_to_date,                           tz in (      # NOQA
-            (2017, 1,     1,    tz.localize(datetime.datetime(2017, 1, 1)),   tz.localize(datetime.datetime(2017, 1, 2)), tz),         # NOQA
-            (2017, 1,     None, tz.localize(datetime.datetime(2017, 1, 1)),   tz.localize(datetime.datetime(2017, 2, 1)), tz),         # NOQA
-            (2017, None,  None, tz.localize(datetime.datetime(2017, 1, 1)),   tz.localize(datetime.datetime(2018, 1, 1)), tz),         # NOQA
-            (2016, None,  None, tz.localize(datetime.datetime(2016, 1, 1)),   tz.localize(datetime.datetime(2017, 1, 1)), tz),         # NOQA
-            (2017, 2,     28,   tz.localize(datetime.datetime(2017, 2, 28)),  tz.localize(datetime.datetime(2017, 3, 1)), tz),         # NOQA
-            (2017, 1,     31,   tz.localize(datetime.datetime(2017, 1, 31)),  tz.localize(datetime.datetime(2017, 2, 1)), tz),         # NOQA
-            (2017, 12,    31,   tz.localize(datetime.datetime(2017, 12, 31)), tz.localize(datetime.datetime(2018, 1, 1)), tz),         # NOQA
-            (2017, 12,    None, tz.localize(datetime.datetime(2017, 12, 1)),  tz.localize(datetime.datetime(2018, 1, 1)), tz),         # NOQA
+            (2017, 1,     1,    datetime.datetime(2017, 1, 1, tzinfo=utc),    datetime.datetime(2017, 1, 2, tzinfo=utc),  utc),        # NOQA
+            (2017, 1,     None, datetime.datetime(2017, 1, 1, tzinfo=utc),    datetime.datetime(2017, 2, 1, tzinfo=utc),  utc),        # NOQA
+            (2017, None,  None, datetime.datetime(2017, 1, 1, tzinfo=utc),    datetime.datetime(2018, 1, 1, tzinfo=utc),  utc),        # NOQA
+            (2016, None,  None, datetime.datetime(2016, 1, 1, tzinfo=utc),    datetime.datetime(2017, 1, 1, tzinfo=utc),  utc),        # NOQA
+            (2017, 2,     28,   datetime.datetime(2017, 2, 28, tzinfo=utc),   datetime.datetime(2017, 3, 1, tzinfo=utc),  utc),        # NOQA
+            (2017, 1,     31,   datetime.datetime(2017, 1, 31, tzinfo=utc),   datetime.datetime(2017, 2, 1, tzinfo=utc),  utc),        # NOQA
+            (2017, 12,    31,   datetime.datetime(2017, 12, 31, tzinfo=utc),  datetime.datetime(2018, 1, 1, tzinfo=utc),  utc),        # NOQA
+            (2017, 12,    None, datetime.datetime(2017, 12, 1, tzinfo=utc),   datetime.datetime(2018, 1, 1, tzinfo=utc),  utc),        # NOQA
             (2017, 1,     1,    datetime.datetime(2017, 1, 1),                datetime.datetime(2017, 1, 2),              None),       # NOQA
             (2017, 1,     None, datetime.datetime(2017, 1, 1),                datetime.datetime(2017, 2, 1),              None),       # NOQA
             (2017, None,  None, datetime.datetime(2017, 1, 1),                datetime.datetime(2018, 1, 1),              None),       # NOQA
@@ -61,7 +59,7 @@ class TestRangeBasedDateHierarchyListFilter(TestCase):
 
         # Create test data in all ranges of the hierarchy.
         Foo.objects.bulk_create([
-            Foo(id=id, created=default_timezone.localize(datetime.datetime(*t)))
+            Foo(id=id, created=datetime.datetime(*t).replace(tzinfo=default_timezone))
             for id, t in [
                 (1, (2017, 1, 15, 15)),
                 (2, (2017, 1, 16, 15)),
