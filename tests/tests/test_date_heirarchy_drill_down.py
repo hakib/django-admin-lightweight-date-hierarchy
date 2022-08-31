@@ -66,7 +66,7 @@ class TestDateHierarchyDrilldown(TestCase):
             # Current selection
             self.assertContains(response, 'January 15')
 
-    @mock.patch('django_admin_lightweight_date_hierarchy.templatetags.admin_list.get_today')
+    @mock.patch('django_admin_lightweight_date_hierarchy.templatetags.ldh_admin_list.get_today')
     def test_should_show_years_selection_if_hierarchy_level_not_selected(self, mock_today):
         mock_today.return_value = datetime.date(2017, 1, 1)
 
