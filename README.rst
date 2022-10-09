@@ -13,7 +13,7 @@ Django Admin lightweight date hierarchy
 
 
 Django Admin date_hierarchy with zero queries
-----------------------------------------------
+---------------------------------------------
 
 **NOTE**: Some of the functionality provided by this extension is `included as
 part of Django <https://github.com/django/django/pull/9469>`_ starting at
@@ -38,7 +38,7 @@ When ``date_hierarchy_drilldown = True`` or when not set the default behaviour i
 
 
 Support
-----------
+-------
 
 Python>=3.6
 
@@ -52,7 +52,7 @@ Install django-admin-lightweight-date-hierarchy::
 
     pip install django-admin-lightweight-date-hierarchy
 
-Add it to your `INSTALLED_APPS`:
+Add it to your ``INSTALLED_APPS``:
 
 .. code-block:: python
 
@@ -127,7 +127,7 @@ For example, a custom drill-down that offers only past dates:
                 )
 
 Blog Post
-----------
+---------
 
 More about the process of developing date hierarchy drill-down in this blog post `scaling django admin date hierarchy`_.
 
@@ -135,11 +135,11 @@ More about the process of developing date hierarchy drill-down in this blog post
 
 
 RangeBasedDateHierarchyListFilter
-----------------------------------------------
+---------------------------------
 
 Django filters the queryset for a given level in the date hierarchy using a database
 function to extract the relevent date part. For example, when filtering a queryset on
-a `created` date field for November 2017, Django will execute the following query:
+a ``created`` date field for November 2017, Django will execute the following query:
 
 .. code-block:: sql
 
@@ -175,7 +175,7 @@ for any given level in the hierarchy:
         AND created < '2017-12-01 00:00:00'
 
 
-This is what RangeBasedDateHierarchyListFilter does.
+This is what ``RangeBasedDateHierarchyListFilter`` does.
 
 To achieve the above query, add the following to your ModelAdmin:
 
@@ -198,7 +198,7 @@ To achieve the above query, add the following to your ModelAdmin:
 Blog Post
 ----------
 
-More about the motivation and the performace of RangeBasedDateHierarchyListFilter in this blog post `Django Admin Range-Based Date Hierarchy`_.
+More about the motivation and the performace of ``RangeBasedDateHierarchyListFilter`` in this blog post `Django Admin Range-Based Date Hierarchy`_.
 
 .. _`Django Admin Range-Based Date Hierarchy`: https://codeburst.io/django-admin-range-based-date-hierarchy-37955b12ea4e
 
