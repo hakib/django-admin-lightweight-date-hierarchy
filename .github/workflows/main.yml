@@ -52,6 +52,9 @@ jobs:
         - name: py310-dj40
           python: "3.10"
 
+        - name: py310-dj41
+          python: "3.10"
+
   deploy:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'hakib/django-admin-lightweight-date-hierarchy'
     runs-on: ubuntu-20.04
