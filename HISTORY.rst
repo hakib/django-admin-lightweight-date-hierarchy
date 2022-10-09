@@ -3,6 +3,11 @@
 History
 -------
 
+1.1.0 (2022-10-09)
+++++++++++++++++++
+
+* Added support for Django 4.1 -- fixed ``templates.E003`` warning.
+
 1.0.1 (2022-02-03)
 ++++++++++++++++++
 
