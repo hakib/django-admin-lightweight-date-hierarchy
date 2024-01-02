@@ -1,5 +1,40 @@
 [build-system]
 requires = [
-    "setuptools >= 35.0.2",
+    "setuptools>=61.0.0",
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-admin-lightweight-date-hierarchy"
+version = "1.1.0"
+description = "Using django admin date hierarchy queries free!"
+readme = "README.rst"
+requires-python = ">=3.7"
+authors = [
+    { name = "Haki Benita", email = "hakibenita@gmail.com" },
+]
+license = {text = "MIT, Django"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "Django>=3.2.0",
+]
+[project.urls]
+Repository = "https://github.com/hakib/django-admin-lightweight-date-hierarchy"
+
+[tool.setuptools]
+packages = ["django_admin_lightweight_date_hierarchy"]
