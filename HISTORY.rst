@@ -3,6 +3,13 @@
 History
 -------
 
+1.2.0 (2024-01-02)
+++++++++++++++++++
+
+* Added support for Django 5.0 -- fixed ``TypeError: int() argument must be a string`` crash.
+* Added support for Python 3.11, 3.12.
+* Dropped support for Django 2.2, 4.0, 4.1 (3.2 LTS is still supported).
+
 1.1.0 (2022-10-09)
 ++++++++++++++++++
 

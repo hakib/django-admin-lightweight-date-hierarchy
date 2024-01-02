@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-admin-lightweight-date-hierarchy"
-version = "1.1.0"
+version = "1.2.0"
 description = "Using django admin date hierarchy queries free!"
 readme = "README.rst"
 requires-python = ">=3.7"
