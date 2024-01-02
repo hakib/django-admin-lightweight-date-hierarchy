@@ -1,6 +1,7 @@
 import re
 import datetime
 
+import django
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.contrib import admin
@@ -66,7 +67,12 @@ class RangeBasedDateHierarchyListFilter(admin.ListFilter):
             match = date_hierarchy_field_re.match(param)
             if match:
                 period = match.group(1)
-                self.date_hierarchy[period] = int(params.pop(param))
+                if django.VERSION >= (5, 0):
+                    param_values = params.pop(param)
+                    if len(param_values) == 1:
+                        self.date_hierarchy[period] = int(param_values[0])
+                else:
+                    self.date_hierarchy[period] = int(params.pop(param))
 
     def has_output(self):
         # Is there a date hierarchy filter?
