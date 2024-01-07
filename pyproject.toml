@@ -38,3 +38,20 @@ Repository = "https://github.com/hakib/django-admin-lightweight-date-hierarchy"
 
 [tool.setuptools]
 packages = ["django_admin_lightweight_date_hierarchy"]
+[tool.setuptools.package-data]
+"django_admin_lightweight_date_hierarchy" = ["py.typed"]
+
+[tool.mypy]
+strict = true
+disallow_subclassing_any = false
+python_version = "3.7"
+files = [
+    "django_admin_lightweight_date_hierarchy/**/*.py",
+    "example/**/*.py",
+    "tests/**/*.py",
+]
+[[tool.mypy.overrides]]
+module = [
+    "django.*",
+]
+ignore_missing_imports = true

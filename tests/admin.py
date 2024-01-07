@@ -1,3 +1,4 @@
+from typing import Iterable, Optional
 import datetime
 
 from django.contrib import admin
@@ -49,7 +50,11 @@ class FooCustomHierarchyAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
     date_hierarchy_drilldown = False
 
-    def get_date_hierarchy_drilldown(self, year_lookup=None, month_lookup=None):
+    def get_date_hierarchy_drilldown(
+        self,
+        year_lookup: Optional[int] = None,
+        month_lookup: Optional[int] = None,
+    ) -> Iterable[datetime.date]:
         if year_lookup is None and month_lookup is None:
             # Year 2018
             return (
@@ -68,6 +73,9 @@ class FooCustomHierarchyAdmin(admin.ModelAdmin):
                 datetime.date(year_lookup, month_lookup, 1),
                 datetime.date(year_lookup, month_lookup, 2),
             )
+
+        else:
+            assert False, 'unreachable code'
 
 
 class FooWithRangeBasedDateHierarchyListFilter(Foo):

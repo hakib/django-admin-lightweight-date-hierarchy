@@ -1,3 +1,4 @@
+from typing import Iterator, Optional
 import datetime
 import calendar
 
@@ -28,7 +29,7 @@ class SaleWithDrilldownAdmin(admin.ModelAdmin):
 
 
 @admin.register(SaleWithCustomDrilldown)
-class SaleWithCustomDrilldown(admin.ModelAdmin):
+class SaleWithCustomDrilldownAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
     date_hierarchy_drilldown = False
 
@@ -36,7 +37,11 @@ class SaleWithCustomDrilldown(admin.ModelAdmin):
         RangeBasedDateHierarchyListFilter,
     )
 
-    def get_date_hierarchy_drilldown(self, year_lookup, month_lookup):
+    def get_date_hierarchy_drilldown(
+        self,
+        year_lookup: Optional[int],
+        month_lookup: Optional[int],
+    ) -> Iterator[datetime.date]:
         """Drill-down only on past dates."""
 
         today = timezone.now().date()
@@ -67,3 +72,6 @@ class SaleWithCustomDrilldown(admin.ModelAdmin):
                     for i in range(days_in_month)
                 ) if day <= today
             )
+
+        else:
+            assert False, 'date hierarchy drilldown makes no sense.'
