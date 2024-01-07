@@ -1,22 +1,17 @@
+from typing import Set
 import datetime
 
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.test import TestCase, RequestFactory
 
-from django_admin_lightweight_date_hierarchy.admin import get_date_range_for_hierarchy
-from .utils import fake_sub_test
+from django_admin_lightweight_date_hierarchy.admin import DateHierarchy, get_date_range_for_hierarchy
 from ..models import Foo
 
 
 class TestGetDateRangeForHierarchy(TestCase):
 
-    def setUp(self):
-        # Python 2.7 does not support subTest, fake it.
-        if not hasattr(self, 'subTest'):
-            self.subTest = fake_sub_test
-
-    def test(self):
+    def test(self) -> None:
         utc = datetime.timezone.utc
 
         for  year, month, day,  expected_from_date,                           expected_to_date,                           tz in (      # NOQA
@@ -33,7 +28,7 @@ class TestGetDateRangeForHierarchy(TestCase):
             (2017, None,  None, datetime.datetime(2017, 1, 1),                datetime.datetime(2018, 1, 1),              None),       # NOQA
         ):
             with self.subTest(year=year, month=month, day=day, timezone=str(tz)):
-                date_hierarchy = {
+                date_hierarchy: DateHierarchy = {
                     'year': year,
                 }
 
@@ -52,14 +47,14 @@ class TestGetDateRangeForHierarchy(TestCase):
 class TestRangeBasedDateHierarchyListFilter(TestCase):
 
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(cls) -> None:
         super().setUpTestData()
 
         default_timezone = timezone.get_default_timezone()
 
         # Create test data in all ranges of the hierarchy.
         Foo.objects.bulk_create([
-            Foo(id=id, created=datetime.datetime(*t).replace(tzinfo=default_timezone))
+            Foo(id=id, created=datetime.datetime(*t).replace(tzinfo=default_timezone))  # type: ignore[arg-type]
             for id, t in [
                 (1, (2017, 1, 15, 15)),
                 (2, (2017, 1, 16, 15)),
@@ -78,28 +73,28 @@ class TestRangeBasedDateHierarchyListFilter(TestCase):
             password='a321321321',
         )
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.factory = RequestFactory()
 
         self.client.force_login(self.superuser)
 
-    def get_results(self, query):
+    def get_results(self, query: str) -> Set[int]:
         url = f'/admin/tests/foowithrangebaseddatehierarchylistfilter/?{query}'
         request = self.factory.get(url)
         response = self.client.get(url)
         cl = response.context_data['cl']
         return set(cl.get_queryset(request).values_list('pk', flat=True))
 
-    def test_should_filter_year(self):
+    def test_should_filter_year(self) -> None:
         self.assertEqual(self.get_results('created__year=2017'), {1, 2, 3, 4, 5})
         self.assertEqual(self.get_results('created__year=2018'), {6, 7, 8, 9})
         self.assertEqual(self.get_results('created__year=2019'), set())
 
-    def test_should_filter_month(self):
+    def test_should_filter_month(self) -> None:
         self.assertEqual(self.get_results('created__year=2018&created__month=2'), {7})
         self.assertEqual(self.get_results('created__year=2018&created__month=3'), {8, 9})
         self.assertEqual(self.get_results('created__year=2019&created__month=1'), set())
 
-    def test_should_filter_day(self):
+    def test_should_filter_day(self) -> None:
         self.assertEqual(self.get_results('created__year=2018&created__month=2&created__day=28'), {7})
         self.assertEqual(self.get_results('created__year=2018&created__month=2&created__day=27'), set())

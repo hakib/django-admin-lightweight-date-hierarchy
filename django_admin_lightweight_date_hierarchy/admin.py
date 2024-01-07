@@ -1,3 +1,4 @@
+from typing import Any, Dict, Iterator, Optional, Tuple, Type, TYPE_CHECKING
 import re
 import datetime
 
@@ -6,22 +7,33 @@ from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.contrib import admin
 from django.utils import timezone
+from django.http import HttpRequest
+from django.db.models import Model, QuerySet
+from django.contrib.admin import ModelAdmin
 
 
-def get_date_range_for_hierarchy(date_hierarchy, tz):
+if TYPE_CHECKING:
+    from typing_extensions import NotRequired, TypedDict
+
+    class DateHierarchy(TypedDict):
+        year: int
+        month: NotRequired[int]
+        day: NotRequired[int]
+else:
+    DateHierarchy = dict
+
+
+def get_date_range_for_hierarchy(
+    date_hierarchy: DateHierarchy,
+    tz: Optional[datetime.timezone],
+) -> Tuple[datetime.datetime, datetime.datetime]:
     """Generate date range for date hierarchy.
 
-    date_hierarchy <dict>:
-        year (int)
-        month (int or None)
-        day (int or None)
-    tz <timezone or None>:
-        The timezone in which to generate the datetimes.
-        If None, the datetimes will be naive.
+    If `tz` is provided, the returned datetimes are aware, otherwise naive.
 
-    Returns (tuple):
-        from_date (datetime.datetime, aware if tz is set) inclusive
-        to_date (datetime.datetime, aware if tz is set) exclusive
+    Returns:
+        [0] from_date - inclusive
+        [1] to_date - exclusive
     """
     from_date = datetime.datetime(
         date_hierarchy['year'],
@@ -48,7 +60,13 @@ def get_date_range_for_hierarchy(date_hierarchy, tz):
 class RangeBasedDateHierarchyListFilter(admin.ListFilter):
     title = ''
 
-    def __init__(self, request, params, model, model_admin):
+    def __init__(
+        self,
+        request: HttpRequest,
+        params: Dict[str, str],
+        model: Type[Model],
+        model_admin: ModelAdmin,
+    ) -> None:
         self.date_hierarchy_field = model_admin.date_hierarchy
 
         if self.date_hierarchy_field is None:
@@ -56,7 +74,7 @@ class RangeBasedDateHierarchyListFilter(admin.ListFilter):
                 'RangeBasedDateHierarchyListFilter requires date_hierarchy to be set in the ModelAdmin'
             )
 
-        self.date_hierarchy = {}
+        self.date_hierarchy: "DateHierarchy" = {}  # type: ignore[typeddict-item]
 
         date_hierarchy_field_re = re.compile(fr'^{self.date_hierarchy_field}__(day|month|year)$')
 
@@ -70,19 +88,19 @@ class RangeBasedDateHierarchyListFilter(admin.ListFilter):
                 if django.VERSION >= (5, 0):
                     param_values = params.pop(param)
                     if len(param_values) == 1:
-                        self.date_hierarchy[period] = int(param_values[0])
+                        self.date_hierarchy[period] = int(param_values[0])  # type: ignore[literal-required]
                 else:
-                    self.date_hierarchy[period] = int(params.pop(param))
+                    self.date_hierarchy[period] = int(params.pop(param))  # type: ignore[literal-required]
 
-    def has_output(self):
+    def has_output(self) -> bool:
         # Is there a date hierarchy filter?
         return bool(self.date_hierarchy)
 
-    def choices(self, changelist):
+    def choices(self, changelist: Any) -> Optional[Iterator[Dict[str, Any]]]:
         # Required.
-        return {}
+        return iter(())
 
-    def queryset(self, request, queryset):
+    def queryset(self, request: HttpRequest, queryset: QuerySet) -> QuerySet:
         tz = timezone.get_default_timezone() if settings.USE_TZ else None
         from_date, to_date = get_date_range_for_hierarchy(self.date_hierarchy, tz)
 

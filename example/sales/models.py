@@ -4,7 +4,7 @@ from django.db import models
 class Sale(models.Model):
     created = models.DateTimeField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'[{self.id}] {self.created:%Y-%m-%d}'
 
 

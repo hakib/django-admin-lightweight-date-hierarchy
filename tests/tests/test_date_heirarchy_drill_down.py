@@ -10,7 +10,7 @@ from ..models import Foo
 class TestDateHierarchyDrilldown(TestCase):
 
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(cls) -> None:
         super().setUpTestData()
 
         # Create test data in all ranges of the hierarchy.
@@ -31,10 +31,10 @@ class TestDateHierarchyDrilldown(TestCase):
             password='a321321321',
         )
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.client.force_login(self.superuser)
 
-    def test_should_preserve_default_behaviour(self):
+    def test_should_preserve_default_behaviour(self) -> None:
         # This is basically testing django's date hierarchy...
         for model in (
             # date_hierarchy_drilldown = False
@@ -67,36 +67,39 @@ class TestDateHierarchyDrilldown(TestCase):
             self.assertContains(response, 'January 15')
 
     @mock.patch('django_admin_lightweight_date_hierarchy.templatetags.ldh_admin_list.get_today')
-    def test_should_show_years_selection_if_hierarchy_level_not_selected(self, mock_today):
+    def test_should_show_years_selection_if_hierarchy_level_not_selected(
+        self,
+        mock_today: mock.Mock,
+    ) -> None:
         mock_today.return_value = datetime.date(2017, 1, 1)
 
         response = self.client.get('/admin/tests/foonodrilldown/')
         for year in range(2014, 2021):
             self.assertContains(response, f'?created__year={year}')
 
-    def test_should_show_years(self):
+    def test_should_show_years(self) -> None:
         response = self.client.get('/admin/tests/foodrilldown/')
         for year in range(2017, 2019):
             self.assertContains(response, f'?created__year={year}')
 
-    def test_should_show_all_months_of_year(self):
+    def test_should_show_all_months_of_year(self) -> None:
         response = self.client.get('/admin/tests/foonodrilldown/?created__year=2017')
         for month in range(1, 13):
             self.assertContains(response, f'?created__month={month}&amp;created__year=2017')
 
-    def test_should_show_all_days_of_month(self):
+    def test_should_show_all_days_of_month(self) -> None:
         response = self.client.get('/admin/tests/foonodrilldown/?created__year=2017&created__month=1')
         for day in range(1, 32):
             self.assertContains(response, f'?created__day={day}&amp;created__month=1&amp;created__year=2017')
 
-    def test_should_only_show_selected_day(self):
+    def test_should_only_show_selected_day(self) -> None:
         response = self.client.get('/admin/tests/foonodrilldown/?created__year=2017&created__month=1&created__day=15')
         # Back date
         self.assertContains(response, '?created__month=1&amp;created__year=2017')
         # Current selection
         self.assertContains(response, 'January 15')
 
-    def test_should_not_execute_additional_queries_for_date_hierarchy(self):
+    def test_should_not_execute_additional_queries_for_date_hierarchy(self) -> None:
         for endpoint in (
             '/admin/tests/foonodrilldown/?created__year=2017',
             '/admin/tests/foonodrilldown/?created__year=2017&created__month=1',
@@ -110,17 +113,17 @@ class TestDateHierarchyDrilldown(TestCase):
             with self.assertNumQueries(4):
                 self.client.get(endpoint)
 
-    def test_should_apply_custom_drilldown_when_no_filter(self):
+    def test_should_apply_custom_drilldown_when_no_filter(self) -> None:
         response = self.client.get('/admin/tests/foocustomhierarchy/')
         self.assertContains(response, '?created__year=2018')
         self.assertNotContains(response, '?created__year=2017')
 
-    def test_should_apply_custom_drilldown_for_year(self):
+    def test_should_apply_custom_drilldown_for_year(self) -> None:
         response = self.client.get('/admin/tests/foocustomhierarchy/?created__year=2017')
         self.assertContains(response, '?created__month=1&amp;created__year=2017')
         self.assertNotContains(response, '?created__month=2&amp;created__year=2017')
 
-    def test_should_apply_custom_drilldown_for_month(self):
+    def test_should_apply_custom_drilldown_for_month(self) -> None:
         response = self.client.get('/admin/tests/foocustomhierarchy/?created__year=2017&created__month=1')
         self.assertContains(response, '?created__day=1&amp;created__month=1&amp;created__year=2017')
         self.assertContains(response, '?created__day=2&amp;created__month=1&amp;created__year=2017')

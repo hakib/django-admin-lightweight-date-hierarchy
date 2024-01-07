@@ -1,3 +1,4 @@
+from typing import Any, Dict, Iterable, Optional
 import datetime
 import calendar
 
@@ -9,22 +10,25 @@ from django.db import models
 from django.contrib.admin.utils import get_fields_from_path
 
 
-def get_today():
+def get_today() -> datetime.date:
     # Get today's date - used for mocking in tests.
     return datetime.date.today()
 
 
-def default_date_hierarchy_drilldown(year_lookup=None, month_lookup=None):
+def default_date_hierarchy_drilldown(
+    year_lookup: Optional[int] = None,
+    month_lookup: Optional[int] = None,
+) -> Iterable[datetime.date]:
     """Generate default drill-down for any level of the hierarchy.
 
-    year_lookup (int or None):
+    year_lookup:
         Year lookup.
         None when no lookup.
-    month_lookup (int or None):
+    month_lookup:
         Month lookup (1-12).
         None when lookup by year or when no lookup.
 
-    Returns (generator<datetime.date>):
+    Yields:
         Dates to drill-down to.
     """
     if year_lookup is None and month_lookup is None:
@@ -50,11 +54,11 @@ def default_date_hierarchy_drilldown(year_lookup=None, month_lookup=None):
         )
 
     else:
-        assert 'date hierarchy drilldown makes no sense.'
+        assert False, 'date hierarchy drilldown makes no sense.'
 
 
-@register.inclusion_tag('admin/date_hierarchy.html')
-def date_hierarchy(cl):
+@register.inclusion_tag('admin/date_hierarchy.html')  # type: ignore[misc]
+def date_hierarchy(cl: Any) -> Optional[Dict[str, Any]]:
     """Displays the date hierarchy for date drill-down functionality.
 
     This tag overrides Django Admin date_hierarchy template tag at
@@ -83,104 +87,106 @@ def date_hierarchy(cl):
             date_hierarchy = 'created'
             date_hierarchy_drilldown = False
     """
-    if cl.date_hierarchy:
-        field_name = cl.date_hierarchy
-        field = get_fields_from_path(cl.model, field_name)[-1]
-        dates_or_datetimes = 'datetimes' if isinstance(field, models.DateTimeField) else 'dates'
-        year_field = '%s__year' % field_name
-        month_field = '%s__month' % field_name
-        day_field = '%s__day' % field_name
-        field_generic = '%s__' % field_name
-        year_lookup = cl.params.get(year_field)
-        month_lookup = cl.params.get(month_field)
-        day_lookup = cl.params.get(day_field)
+    if not cl.date_hierarchy:
+        return None
 
-        def link(filters):
-            return cl.get_query_string(filters, [field_generic])
+    field_name: str = cl.date_hierarchy
+    field = get_fields_from_path(cl.model, field_name)[-1]
+    dates_or_datetimes = 'datetimes' if isinstance(field, models.DateTimeField) else 'dates'
+    year_field = '%s__year' % field_name
+    month_field = '%s__month' % field_name
+    day_field = '%s__day' % field_name
+    field_generic = '%s__' % field_name
+    year_lookup: Optional[str] = cl.params.get(year_field)
+    month_lookup: Optional[str] = cl.params.get(month_field)
+    day_lookup: Optional[str] = cl.params.get(day_field)
 
-        date_hierarchy_drilldown = getattr(cl.model_admin, 'date_hierarchy_drilldown', True)
-        date_hierarchy_drilldown_fn = getattr(
-            cl.model_admin,
-            'get_date_hierarchy_drilldown',
-            default_date_hierarchy_drilldown,
-        )
+    def link(filters: Dict[str, str]) -> str:
+        return cl.get_query_string(filters, [field_generic])  # type: ignore[no-any-return]
 
-        if not (year_lookup or month_lookup or day_lookup):
+    date_hierarchy_drilldown = getattr(cl.model_admin, 'date_hierarchy_drilldown', True)
+    date_hierarchy_drilldown_fn = getattr(
+        cl.model_admin,
+        'get_date_hierarchy_drilldown',
+        default_date_hierarchy_drilldown,
+    )
 
-            # Select appropriate start level.
-            if date_hierarchy_drilldown:
-                date_range = cl.queryset.aggregate(first=models.Min(field_name), last=models.Max(field_name))
-                if date_range['first'] and date_range['last']:
-                    if date_range['first'].year == date_range['last'].year:
-                        year_lookup = date_range['first'].year
-                        if date_range['first'].month == date_range['last'].month:
-                            month_lookup = date_range['first'].month
+    if not (year_lookup or month_lookup or day_lookup):
 
-        if year_lookup and month_lookup and day_lookup:
-            day = datetime.date(int(year_lookup), int(month_lookup), int(day_lookup))
-            return {
-                'show': True,
-                'back': {
-                    'link': link({year_field: year_lookup, month_field: month_lookup}),
-                    'title': capfirst(formats.date_format(day, 'YEAR_MONTH_FORMAT'))
-                },
-                'choices': [{'title': capfirst(formats.date_format(day, 'MONTH_DAY_FORMAT'))}]
-            }
+        # Select appropriate start level.
+        if date_hierarchy_drilldown:
+            date_range = cl.queryset.aggregate(first=models.Min(field_name), last=models.Max(field_name))
+            if date_range['first'] and date_range['last']:
+                if date_range['first'].year == date_range['last'].year:
+                    year_lookup = date_range['first'].year
+                    if date_range['first'].month == date_range['last'].month:
+                        month_lookup = date_range['first'].month
 
-        elif year_lookup and month_lookup:
+    if year_lookup and month_lookup and day_lookup:
+        day = datetime.date(int(year_lookup), int(month_lookup), int(day_lookup))
+        return {
+            'show': True,
+            'back': {
+                'link': link({year_field: year_lookup, month_field: month_lookup}),
+                'title': capfirst(formats.date_format(day, 'YEAR_MONTH_FORMAT'))
+            },
+            'choices': [{'title': capfirst(formats.date_format(day, 'MONTH_DAY_FORMAT'))}]
+        }
 
-            if date_hierarchy_drilldown:
-                days = cl.queryset.filter(**{year_field: year_lookup, month_field: month_lookup})
-                days = getattr(days, dates_or_datetimes)(field_name, 'day')
+    elif year_lookup and month_lookup:
 
-            else:
-                days = date_hierarchy_drilldown_fn(int(year_lookup), int(month_lookup))
-
-            return {
-                'show': True,
-                'back': {
-                    'link': link({year_field: year_lookup}),
-                    'title': str(year_lookup)
-                },
-                'choices': [{
-                    'link': link({year_field: year_lookup, month_field: month_lookup, day_field: day.day}),
-                    'title': capfirst(formats.date_format(day, 'MONTH_DAY_FORMAT'))
-                } for day in days]
-            }
-
-        elif year_lookup:
-
-            if date_hierarchy_drilldown:
-                months = cl.queryset.filter(**{year_field: year_lookup})
-                months = getattr(months, dates_or_datetimes)(field_name, 'month')
-
-            else:
-                months = date_hierarchy_drilldown_fn(int(year_lookup), None)
-
-            return {
-                'show': True,
-                'back': {
-                    'link': link({}),
-                    'title': _('All dates')
-                },
-                'choices': [{
-                    'link': link({year_field: year_lookup, month_field: month.month}),
-                    'title': capfirst(formats.date_format(month, 'YEAR_MONTH_FORMAT'))
-                } for month in months]
-            }
+        if date_hierarchy_drilldown:
+            days = cl.queryset.filter(**{year_field: year_lookup, month_field: month_lookup})
+            days = getattr(days, dates_or_datetimes)(field_name, 'day')
 
         else:
+            days = date_hierarchy_drilldown_fn(int(year_lookup), int(month_lookup))
 
-            if date_hierarchy_drilldown:
-                years = getattr(cl.queryset, dates_or_datetimes)(field_name, 'year')
+        return {
+            'show': True,
+            'back': {
+                'link': link({year_field: year_lookup}),
+                'title': str(year_lookup)
+            },
+            'choices': [{
+                'link': link({year_field: year_lookup, month_field: month_lookup, day_field: day.day}),
+                'title': capfirst(formats.date_format(day, 'MONTH_DAY_FORMAT'))
+            } for day in days]
+        }
 
-            else:
-                years = date_hierarchy_drilldown_fn(None, None)
+    elif year_lookup:
 
-            return {
-                'show': True,
-                'choices': [{
-                    'link': link({year_field: str(year.year)}),
-                    'title': str(year.year),
-                } for year in years]
-            }
+        if date_hierarchy_drilldown:
+            months = cl.queryset.filter(**{year_field: year_lookup})
+            months = getattr(months, dates_or_datetimes)(field_name, 'month')
+
+        else:
+            months = date_hierarchy_drilldown_fn(int(year_lookup), None)
+
+        return {
+            'show': True,
+            'back': {
+                'link': link({}),
+                'title': _('All dates')
+            },
+            'choices': [{
+                'link': link({year_field: year_lookup, month_field: month.month}),
+                'title': capfirst(formats.date_format(month, 'YEAR_MONTH_FORMAT'))
+            } for month in months]
+        }
+
+    else:
+
+        if date_hierarchy_drilldown:
+            years = getattr(cl.queryset, dates_or_datetimes)(field_name, 'year')
+
+        else:
+            years = date_hierarchy_drilldown_fn(None, None)
+
+        return {
+            'show': True,
+            'choices': [{
+                'link': link({year_field: str(year.year)}),
+                'title': str(year.year),
+            } for year in years]
+        }
