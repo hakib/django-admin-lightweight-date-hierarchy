@@ -3,6 +3,12 @@
 History
 -------
 
+1.3.0 (2024-01-07)
+++++++++++++++++++
+
+* Added typing.
+* Fixed packaging error in previous release.
+
 1.2.0 (2024-01-02)
 ++++++++++++++++++
 
