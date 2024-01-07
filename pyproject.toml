@@ -37,7 +37,10 @@ dependencies = [
 Repository = "https://github.com/hakib/django-admin-lightweight-date-hierarchy"
 
 [tool.setuptools]
-packages = ["django_admin_lightweight_date_hierarchy"]
+packages = [
+    "django_admin_lightweight_date_hierarchy",
+    "django_admin_lightweight_date_hierarchy.templatetags",
+]
 [tool.setuptools.package-data]
 "django_admin_lightweight_date_hierarchy" = ["py.typed"]
 
