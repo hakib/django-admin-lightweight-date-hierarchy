@@ -126,6 +126,28 @@ For example, a custom drill-down that offers only past dates:
                     ) if day <= today
                 )
 
+
+Drilling down on past dates is very common so the above function is included in this packge.
+To drill down on past dates use the following:
+
+.. code-block:: python
+
+
+    from django.utils import timezone
+    from django.contrib import admin
+    from django_admin_lightweight_date_hierarchy.utils import get_date_hierarchy_drilldown_on_past_dates
+
+
+    @admin.register(MyModel)
+    class MyModelAdmin(admin.ModelAdmin):
+        date_hierarchy = 'created'
+        date_hierarchy_drilldown = False
+
+        def get_date_hierarchy_drilldown(self, year_lookup, month_lookup):
+            return get_date_hierarchy_drilldown_on_past_dates(year_lookup, month_lookup, timezone.now())
+
+
+
 Blog Post
 ---------
 
